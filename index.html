@@ -4,16 +4,18 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<title>Giftastic</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
-	<div class="conatiner">
+	<div class="container">
 		<div class="jumbotron text-center">
   			<h1>Gif Generator</h1>
   			<p>Click some of the buttons to see some cool gifs. If you click the image the gif will start. If you click it again it will stop. Create some buttons in the search bar and you can see some gifs of your choice!</p> 
 		</div>
 		<div id="presetButtons"></div>
-		<div id="gifs" class="col-md-8"></div>
-		<div id="searchBar" class="col-md-4">
+		<div id="gifs" ></div>
+		<div id="searchBar">
 			<form>
 				<label for="car-input"></label>
       			<input type="text" id="car-input" placeholder="Add a Car!">
