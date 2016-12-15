@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<title>Giftastic</title>
+</head>
+<body>
+	<div class="conatiner">
+		<div class="jumbotron text-center">
+  			<h1>Gif Generator</h1>
+  			<p>Click some of the buttons to see some cool gifs. If you click the image the gif will start. If you click it again it will stop. Create some buttons in the search bar and you can see some gifs of your choice!</p> 
+		</div>
+		<div id="presetButtons"></div>
+		<div id="gifs" class="col-md-8"></div>
+		<div id="searchBar" class="col-md-4">
+			<form>
+				<label for="car-input"></label>
+      			<input type="text" id="car-input" placeholder="Add a Car!">
+      				<br>
+
+      			<!-- Button triggers new movie to be added -->
+      			<input id="add-car" type="submit" value="Create">
+			</form>
+		</div>
+
+	</div>
+	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript">
+	//Array of preset cars for buttons
+		var carArray = ["Honda S2000", "Nissan GTR", "Audi R8", "R32 Skyline", "Subaru BRZ", "Acura NSX", "Volkswagen GTI"];
+		
+		
+	    function displayGifs() {
+
+        	var car = $(this).attr("data-name");    
+			var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+	        		car + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+	     	$.ajax({
+				url: queryURL,
+				method: "GET"
+				})
+				.done(function(response){
+					console.log(response)
+					var results = response.data
+					for(i = 0; i < results.length; i++) {
+						var carDiv = $("<div>");
+        				var p = $("<p>").text("Rating: " + results[i].rating);
+        				var carStill = results[i].images.fixed_width_still.url;
+        				var carAnimate = results[i].images.fixed_width.url;
+
+        				var carGif = $("<img>").attr("src", carStill).attr("data-still", carStill).attr("data-animate", carAnimate).attr("data-state", "still").attr("class", "gif");
+
+        				carDiv.append(p);
+        				// debugger;
+        				carDiv.append(carGif);
+        				// debugger;
+        				$("#gifs").prepend(carDiv);
+
+        				
+          			}
+          			$(".gif").on("click", function() {
+							var state = $(this).attr("data-state");
+							if (state == "still") {
+					        	$(this).attr("src", $(this).data("animate"));
+					        	$(this).attr("data-state", "animate");
+					      	};
+					      	if (state !== "still") {
+					        	$(this).attr("src", $(this).data("still"));
+					        	$(this).attr("data-state", "still");
+					      	};
+						});
+				});
+			}	
+
+		function renderButtons() {
+			$("#presetButtons").empty();
+
+			for (var i = 0; i < carArray.length; i++) {
+
+          	var btn = $("<button>");
+          
+          	btn.addClass("car");
+          
+          	btn.attr("data-name", carArray[i]);
+          
+          	btn.text(carArray[i]);
+          
+          	$("#presetButtons").append(btn);
+		}
+	};
+	$(document).on("click", ".car", displayGifs);
+	$("#add-car").on("click", function(event) {
+
+        event.preventDefault();
+
+        // Write code to grab the text the user types into the input field
+        var gifValue = $('#car-input').val();
+        // Write code to add the new movie into the movies array
+        carArray.push(gifValue);
+        // The renderButtons function is called, rendering the list of movie buttons
+        renderButtons();
+        $('#car-input').val("");
+      });
+
+	renderButtons();
+	$(".gif").on("click", function() {
+		var state = $(this).attr("data-state");
+			if (state == "still") {
+				$(this).attr("src", $(this).data("animate"));
+	        	$(this).attr("data-state", "animate");		    
+	        };
+	      	if (state !== "still") {
+	        	$(this).attr("src", $(this).data("still"));
+	        	$(this).attr("data-state", "still");
+			};
+		});
+	
+	</script>
+
+</body>
+</html>
